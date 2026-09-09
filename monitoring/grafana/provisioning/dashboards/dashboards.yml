@@ -1,0 +1,11 @@
+apiVersion: 1
+
+providers:
+  - name: 'Agentic Hub Dashboards'
+    orgId: 1
+    folder: 'Agentic AI Systems'
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /etc/grafana/dashboards

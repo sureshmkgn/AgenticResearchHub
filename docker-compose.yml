@@ -1,0 +1,103 @@
+services:
+  # ============================================================================
+  # 1. Main Agentic Research Hub Application
+  # ============================================================================
+  agentic-research-hub:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: agentic-research-hub
+    ports:
+      - "${APP_PORT:-5050}:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - LlmGateway__Provider=${LLM_PROVIDER:-OpenAI}
+      - LlmGateway__Endpoint=${LLM_ENDPOINT:-https://api.openai.com/v1}
+      - LlmGateway__ApiKey=${LLM_API_KEY:-}
+      - LlmGateway__ModelId=${LLM_MODEL_ID:-gpt-4o}
+      - LlmGateway__EmbeddingModelId=${LLM_EMBEDDING_MODEL_ID:-text-embedding-3-small}
+      - LlmGateway__UseOfflineMockFallbackIfNoApiKey=true
+      - WebSearch__Provider=${WEB_SEARCH_PROVIDER:-DuckDuckGo}
+      - WebSearch__BingApiKey=${BING_API_KEY:-}
+      - WebSearch__McpServerUrl=${MCP_SERVER_URL:-}
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    depends_on:
+      - otel-collector
+      - prometheus
+      - jaeger
+    restart: unless-stopped
+    networks:
+      - agentic-network
+
+  # ============================================================================
+  # 2. OpenTelemetry Collector (Trace & Metrics Routing)
+  # ============================================================================
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.95.0
+    container_name: agentic-otel-collector
+    command: ["--config=/etc/otel-collector-config.yml"]
+    volumes:
+      - ./monitoring/otel-collector/otel-collector-config.yml:/etc/otel-collector-config.yml:ro
+    ports:
+      - "4317:4317" # OTLP gRPC receiver
+      - "4318:4318" # OTLP HTTP receiver
+      - "8889:8889" # Prometheus metrics exporter
+    depends_on:
+      - jaeger
+    networks:
+      - agentic-network
+
+  # ============================================================================
+  # 3. Jaeger (Distributed Tracing UI & Backend)
+  # ============================================================================
+  jaeger:
+    image: jaegertracing/all-in-one:1.54
+    container_name: agentic-jaeger
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    ports:
+      - "16686:16686" # Jaeger Web UI
+    networks:
+      - agentic-network
+
+  # ============================================================================
+  # 4. Prometheus (Time-Series Metrics)
+  # ============================================================================
+  prometheus:
+    image: prom/prometheus:v2.50.1
+    container_name: agentic-prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090" # Prometheus UI & API
+    networks:
+      - agentic-network
+
+  # ============================================================================
+  # 5. Grafana (Operational & Cost Dashboards)
+  # ============================================================================
+  grafana:
+    image: grafana/grafana:10.3.3
+    container_name: agentic-grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - ./monitoring/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./monitoring/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/grafana/dashboards:/etc/grafana/dashboards:ro
+    ports:
+      - "3000:3000" # Grafana Web UI
+    depends_on:
+      - prometheus
+      - jaeger
+    networks:
+      - agentic-network
+
+networks:
+  agentic-network:
+    driver: bridge

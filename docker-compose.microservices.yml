@@ -1,0 +1,89 @@
+# ==============================================================================
+# Agentic Research Hub - Independent Micro-Agent Distributed Cluster
+# ==============================================================================
+services:
+  # 1. Orchestrator Service & Web UI
+  orchestrator-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: agent-orchestrator-gateway
+    ports:
+      - "${MICROSERVICES_PORT:-5060}:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - LlmGateway__Provider=${LLM_PROVIDER:-OpenAI}
+      - LlmGateway__ApiKey=${LLM_API_KEY:-}
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    restart: unless-stopped
+    networks:
+      - agent-mesh
+
+  # 2. Supervisor Agent Microservice
+  supervisor-agent-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: agent-service-supervisor
+    ports:
+      - "5061:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - LlmGateway__ApiKey=${LLM_API_KEY:-}
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    restart: unless-stopped
+    networks:
+      - agent-mesh
+
+  # 3. Researcher Agent Microservice
+  researcher-agent-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: agent-service-researcher
+    ports:
+      - "5062:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - LlmGateway__ApiKey=${LLM_API_KEY:-}
+      - WebSearch__Provider=${WEB_SEARCH_PROVIDER:-DuckDuckGo}
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    restart: unless-stopped
+    networks:
+      - agent-mesh
+
+  # 4. Fact-Checker & Critic Agent Microservice
+  factchecker-agent-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: agent-service-factchecker
+    ports:
+      - "5063:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - LlmGateway__ApiKey=${LLM_API_KEY:-}
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    restart: unless-stopped
+    networks:
+      - agent-mesh
+
+  # 5. Synthesizer Agent Microservice
+  synthesizer-agent-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: agent-service-synthesizer
+    ports:
+      - "5064:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - LlmGateway__ApiKey=${LLM_API_KEY:-}
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    restart: unless-stopped
+    networks:
+      - agent-mesh
+
+networks:
+  agent-mesh:
+    driver: bridge

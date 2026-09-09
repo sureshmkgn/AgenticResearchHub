@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentic Research Hub | Microsoft .NET Enterprise AI</title>
+    <meta name="description" content="Autonomous Multi-Agent Research Platform with Microsoft Semantic Kernel, MCP, A2A Mesh, Guardrails, and Vector Semantic Search.">
+    <!-- Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Enterprise Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Marked.js for Markdown Rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation Bar -->
+        <header class="navbar">
+            <div class="nav-brand">
+                <div class="brand-logo">
+                    <i class="fa-solid fa-brain-circuit"></i>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-title">Agentic<span class="gradient-text">Research</span>Hub</span>
+                    <span class="brand-subtitle">Microsoft .NET 9 Enterprise Multi-Agent System</span>
+                </div>
+            </div>
+
+            <div class="nav-status-pills">
+                <div class="status-pill" id="pill-llm" title="LLM Gateway Provider">
+                    <span class="dot active"></span>
+                    <i class="fa-solid fa-microchip"></i>
+                    <span id="nav-llm-label">OpenAI gpt-4o</span>
+                </div>
+                <div class="status-pill" id="pill-search" title="Configured Search Provider">
+                    <i class="fa-solid fa-globe"></i>
+                    <span id="nav-search-label">DuckDuckGo / MCP</span>
+                </div>
+                <div class="status-pill" id="pill-otel" title="OpenTelemetry Tracing">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>OTel Active</span>
+                </div>
+                <div class="status-pill" id="pill-guardrails" title="Guardrails Protection">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>4 Guardrails Active</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Navigation Tabs -->
+        <nav class="tabs-nav">
+            <button class="tab-btn active" data-tab="tab-research" id="tab-btn-research">
+                <i class="fa-solid fa-network-wired"></i> Research Console & Agents
+            </button>
+            <button class="tab-btn" data-tab="tab-report" id="tab-btn-report">
+                <i class="fa-solid fa-file-invoice"></i> Intelligence Report <span class="badge" id="report-badge" style="display:none;">Ready</span>
+            </button>
+            <button class="tab-btn" data-tab="tab-vector" id="tab-btn-vector">
+                <i class="fa-solid fa-database"></i> Semantic Knowledge Search (<span id="stored-reports-count">0</span>)
+            </button>
+            <button class="tab-btn" data-tab="tab-a2a" id="tab-btn-a2a">
+                <i class="fa-solid fa-comments"></i> A2A Message Mesh & Telemetry
+            </button>
+        </nav>
+
+        <!-- Main Workspace -->
+        <main class="content-area">
+            
+            <!-- TAB 1: RESEARCH CONSOLE -->
+            <section id="tab-research" class="tab-panel active">
+                <div class="grid-layout">
+                    <!-- Left: Control & Prompt Console -->
+                    <div class="panel card prompt-card">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-magnifying-glass-chart"></i> Autonomous Research Mission</h2>
+                            <p class="section-desc">Initiate multi-agent autonomous reasoning, search decomposition, and fact-checking.</p>
+                        </div>
+
+                        <form id="research-form">
+                            <div class="form-group">
+                                <label for="topic-input">Research Topic or Question</label>
+                                <textarea id="topic-input" placeholder="e.g. Advancements in Microsoft Semantic Kernel 1.38 and Agentic Orchestration Patterns for Distributed Microservices..." rows="4" required></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="context-input">Domain Context / Specific Constraints <span class="optional">(Optional)</span></label>
+                                <input type="text" id="context-input" placeholder="e.g. Focus on .NET 9, Resilience with Polly, and Enterprise Security">
+                            </div>
+
+                            <div class="options-grid">
+                                <div class="form-group">
+                                    <label for="search-engine-select">Search Provider</label>
+                                    <select id="search-engine-select">
+                                        <option value="DuckDuckGo">DuckDuckGo Web Search</option>
+                                        <option value="Bing">Bing Search API v7</option>
+                                        <option value="MCP">Model Context Protocol (MCP)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group toggle-group">
+                                    <label>Security & Guardrails</label>
+                                    <label class="switch">
+                                        <input type="checkbox" id="guardrails-toggle" checked>
+                                        <span class="slider round"></span>
+                                    </label>
+                                    <span class="switch-label">Prompt Injection & Policy Shield</span>
+                                </div>
+                            </div>
+
+                            <div class="sample-topics">
+                                <span class="sample-label">Quick Prompts:</span>
+                                <button type="button" class="chip" data-topic="Microsoft Semantic Kernel Agent Orchestration and Multi-Agent Collaboration Patterns in .NET 9">Semantic Kernel .NET 9</button>
+                                <button type="button" class="chip" data-topic="Model Context Protocol (MCP) Architecture and Enterprise Agent Integration Guidelines">Model Context Protocol</button>
+                                <button type="button" class="chip" data-topic="SIMD Vector Search and High-Performance Embeddings in Modern C#">SIMD Vector Search C#</button>
+                            </div>
+
+                            <button type="submit" id="btn-start-research" class="btn-primary">
+                                <i class="fa-solid fa-rocket"></i> Launch Multi-Agent Workflow
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Right: Multi-Agent Collaboration Live Visualizer -->
+                    <div class="panel card agents-card">
+                        <div class="card-header flex-between">
+                            <h2><i class="fa-solid fa-diagram-project"></i> Multi-Agent Orchestration Mesh</h2>
+                            <span class="agent-mesh-status" id="mesh-status-indicator">Idle</span>
+                        </div>
+
+                        <!-- Agent Topology Map -->
+                        <div class="agent-topology">
+                            <div class="agent-node" id="node-guardrail" data-role="Guardrail">
+                                <div class="node-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                                <div class="node-title">Guardrail Shield</div>
+                                <div class="node-subtitle">Policy & Injection</div>
+                                <span class="node-status">Standby</span>
+                            </div>
+                            <div class="topology-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+
+                            <div class="agent-node" id="node-supervisor" data-role="Supervisor">
+                                <div class="node-icon"><i class="fa-solid fa-user-tie"></i></div>
+                                <div class="node-title">Supervisor</div>
+                                <div class="node-subtitle">Plan & Decompose</div>
+                                <span class="node-status">Standby</span>
+                            </div>
+                            <div class="topology-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+
+                            <div class="agent-node" id="node-researcher" data-role="Researcher">
+                                <div class="node-icon"><i class="fa-solid fa-compass"></i></div>
+                                <div class="node-title">Researcher</div>
+                                <div class="node-subtitle">Web Search & MCP</div>
+                                <span class="node-status">Standby</span>
+                            </div>
+                            <div class="topology-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+
+                            <div class="agent-node" id="node-factchecker" data-role="FactChecker">
+                                <div class="node-icon"><i class="fa-solid fa-check-double"></i></div>
+                                <div class="node-title">Fact-Checker</div>
+                                <div class="node-subtitle">Critic & Review</div>
+                                <span class="node-status">Standby</span>
+                            </div>
+                            <div class="topology-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+
+                            <div class="agent-node" id="node-synthesizer" data-role="Synthesizer">
+                                <div class="node-icon"><i class="fa-solid fa-feather-pointed"></i></div>
+                                <div class="node-title">Synthesizer</div>
+                                <div class="node-subtitle">Report & Vector Store</div>
+                                <span class="node-status">Standby</span>
+                            </div>
+                        </div>
+
+                        <!-- Live Event Activity Stream -->
+                        <div class="activity-stream-header">
+                            <h3><i class="fa-solid fa-terminal"></i> Live Execution Stream (Server-Sent Events)</h3>
+                            <button class="btn-sm" id="btn-clear-stream"><i class="fa-solid fa-trash-can"></i> Clear</button>
+                        </div>
+                        <div class="activity-feed" id="activity-feed">
+                            <div class="feed-placeholder">
+                                <i class="fa-solid fa-circle-nodes"></i>
+                                <p>Launch a research mission to monitor live agent reasoning, tool invocations, and handoffs.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: INTELLIGENCE REPORT -->
+            <section id="tab-report" class="tab-panel">
+                <div class="report-layout">
+                    <div class="report-main card">
+                        <div class="report-header-bar">
+                            <div>
+                                <span class="badge badge-success" id="report-duration-badge"><i class="fa-solid fa-clock"></i> Generated in 0s</span>
+                                <span class="badge badge-info" id="report-topic-badge">Topic</span>
+                            </div>
+                            <div class="report-actions">
+                                <button class="btn-secondary" id="btn-copy-markdown"><i class="fa-solid fa-copy"></i> Copy Markdown</button>
+                                <button class="btn-secondary" id="btn-print-report"><i class="fa-solid fa-print"></i> Print / PDF</button>
+                            </div>
+                        </div>
+
+                        <div id="report-content" class="markdown-body">
+                            <div class="empty-state">
+                                <i class="fa-solid fa-file-lines"></i>
+                                <h3>No Report Generated Yet</h3>
+                                <p>Submit a topic in the Research Console tab to trigger autonomous multi-agent synthesis.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right sidebar: Citations and Key Findings -->
+                    <div class="report-sidebar">
+                        <div class="card findings-card">
+                            <h3><i class="fa-solid fa-list-check"></i> Key Findings</h3>
+                            <ul id="key-findings-list" class="findings-list">
+                                <li class="text-muted">Awaiting synthesis...</li>
+                            </ul>
+                        </div>
+
+                        <div class="card citations-card">
+                            <h3><i class="fa-solid fa-book-bookmark"></i> Discovered Citations (<span id="citations-count">0</span>)</h3>
+                            <div id="citations-list" class="citations-container">
+                                <p class="text-muted">No citations retrieved yet.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: SEMANTIC VECTOR SEARCH -->
+            <section id="tab-vector" class="tab-panel">
+                <div class="card semantic-search-box">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-brain"></i> Semantic Vector Search on Intelligence Store</h2>
+                        <p class="section-desc">Search past research reports by concept, intent, or keywords using high-dimensional cosine similarity embeddings.</p>
+                    </div>
+
+                    <div class="search-input-row">
+                        <div class="search-bar">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="semantic-search-input" placeholder="e.g. Which report discussed Polly resilience and circuit breakers?">
+                        </div>
+                        <button id="btn-semantic-search" class="btn-primary">
+                            <i class="fa-solid fa-bolt"></i> Vector Search
+                        </button>
+                    </div>
+
+                    <div class="search-params">
+                        <label for="similarity-slider">Min Cosine Similarity: <span id="similarity-value">0.20</span></label>
+                        <input type="range" id="similarity-slider" min="0.0" max="0.9" step="0.05" value="0.20">
+                    </div>
+                </div>
+
+                <div class="semantic-results-container" id="semantic-results">
+                    <!-- Dynamic Results -->
+                </div>
+            </section>
+
+            <!-- TAB 4: A2A MESH & TELEMETRY -->
+            <section id="tab-a2a" class="tab-panel">
+                <div class="a2a-grid">
+                    <div class="card">
+                        <div class="card-header flex-between">
+                            <h2><i class="fa-solid fa-network-wired"></i> Agent-to-Agent (A2A) Message Trace</h2>
+                            <button class="btn-sm" id="btn-refresh-a2a"><i class="fa-solid fa-rotate"></i> Refresh Trace</button>
+                        </div>
+                        <div id="a2a-message-feed" class="a2a-feed">
+                            <p class="text-muted">No A2A messages in history yet.</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-gauge-high"></i> Enterprise Telemetry & Diagnostics</h2>
+                        </div>
+                        <div class="telemetry-grid">
+                            <div class="stat-card">
+                                <div class="stat-num" id="stat-reports">0</div>
+                                <div class="stat-label">Stored Vector Reports</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-num" id="stat-a2a-count">0</div>
+                                <div class="stat-label">A2A Handoffs</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-num">4</div>
+                                <div class="stat-label">Guardrail Filters</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-num">4</div>
+                                <div class="stat-label">Active Agents</div>
+                            </div>
+                        </div>
+
+                        <div class="diagnostics-details">
+                            <h3><i class="fa-solid fa-cube"></i> Architecture Specifications</h3>
+                            <ul class="specs-list">
+                                <li><strong>Framework:</strong> .NET 9.0 / ASP.NET Core Minimal APIs</li>
+                                <li><strong>Orchestrator:</strong> Microsoft Semantic Kernel & Custom A2A Mesh</li>
+                                <li><strong>Resilience:</strong> Polly Circuit Breaker, Exponential Retry & Jitter</li>
+                                <li><strong>Observability:</strong> OpenTelemetry ActivitySource & Prometheus Meter</li>
+                                <li><strong>Vector Search:</strong> In-Memory SIMD Cosine Similarity Vector Index</li>
+                                <li><strong>Protocol:</strong> Model Context Protocol (MCP) JSON-RPC 2.0</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Global Toast Notifications -->
+    <div id="toast" class="toast"></div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

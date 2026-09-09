@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>13</LangVersion>
+    <RootNamespace>AgenticResearchHub.Agents</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AgenticResearchHub.Core\AgenticResearchHub.Core.csproj" />
+    <ProjectReference Include="..\AgenticResearchHub.Infrastructure\AgenticResearchHub.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SemanticKernel" Version="1.38.0" />
+    <PackageReference Include="Microsoft.SemanticKernel.Agents.Core" Version="1.38.0-alpha" />
+    <PackageReference Include="Microsoft.Extensions.AI.Abstractions" Version="9.2.0-preview.1.25114.11" />
+  </ItemGroup>
+
+</Project>
