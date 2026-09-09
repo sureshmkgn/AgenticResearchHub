@@ -2,6 +2,7 @@ using System.Text.Json;
 using AgenticResearchHub.Agents.A2A;
 using AgenticResearchHub.Agents.Implementations;
 using AgenticResearchHub.Agents.Orchestration;
+using AgenticResearchHub.Agents.Prompts;
 using AgenticResearchHub.Core.Cost;
 using AgenticResearchHub.Core.Guardrails;
 using AgenticResearchHub.Core.Interfaces;
@@ -86,12 +87,37 @@ builder.Services.AddSingleton<IGuardrailValidator, TopicPolicyGuardrail>();
 builder.Services.AddSingleton<IGuardrailValidator, OutputFactualityGuardrail>();
 builder.Services.AddSingleton<GuardrailPipeline>();
 
-// 6. Prompt Templating Engine & Prompt Library
+// 6. Prompt Templating Engine, Prompt Library & Hot-Reload Watcher
 builder.Services.AddSingleton<IPromptRegistry, PromptRegistry>(sp =>
 {
     var registry = new PromptRegistry();
-    AgenticResearchHub.Agents.Prompts.AgentPromptRegistrar.RegisterAllAgentPrompts(registry);
+    registry.RegisterAllAgentPrompts();
     return registry;
+});
+builder.Services.AddSingleton<PromptFileWatcher>(sp =>
+{
+    var registry = sp.GetRequiredService<IPromptRegistry>();
+    var logger = sp.GetRequiredService<ILogger<PromptFileWatcher>>();
+    var watcher = new PromptFileWatcher(registry, logger);
+
+    // Baseline embedded templates
+    watcher.LoadEmbeddedTemplates();
+
+    // Check application base directory templates
+    var baseDir = Path.Combine(AppContext.BaseDirectory, "Prompts", "Templates");
+    if (Directory.Exists(baseDir))
+    {
+        watcher.WatchDirectory(baseDir);
+    }
+
+    // Check optional custom mounted directory
+    var customDir = builder.Configuration["PromptDirectory"] ?? Environment.GetEnvironmentVariable("PROMPT_DIRECTORY");
+    if (!string.IsNullOrEmpty(customDir) && Directory.Exists(customDir))
+    {
+        watcher.WatchDirectory(customDir);
+    }
+
+    return watcher;
 });
 builder.Services.AddSingleton<PromptTemplateEngine>();
 
@@ -115,6 +141,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+// 9. Initialize Hot-Reload Prompt Watcher & Embedded Baseline
+_ = app.Services.GetRequiredService<PromptFileWatcher>();
 
 app.UseCors();
 app.UseDefaultFiles();

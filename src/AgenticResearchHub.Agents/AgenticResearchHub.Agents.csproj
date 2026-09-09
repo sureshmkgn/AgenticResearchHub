@@ -19,4 +19,11 @@
     <PackageReference Include="Microsoft.Extensions.AI.Abstractions" Version="9.2.0-preview.1.25114.11" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Prompts\Templates\*.prompt.md" />
+    <Content Include="Prompts\Templates\*.prompt.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
